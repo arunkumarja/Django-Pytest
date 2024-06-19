@@ -1,34 +1,58 @@
-# test_create_student_api.py
-
 import pytest
+from Test_App.models import Student
 from rest_framework.test import APIClient
-from rest_framework import status
 from django.urls import reverse
-from Test_App.models import Student  # Adjust based on your app structure
 
-@pytest.fixture
-def api_client():
-    return APIClient()
+
 
 @pytest.mark.django_db
-class TestStudentAPI:
+class TestStudent:
 
-    def test_create_student(self, api_client):
-        url = reverse('student_post')  # Assuming 'student-create' is your URL name for creating students
-        
-        # Data to be sent in the POST request
-        data = {
-            'name': 'John Doe',
-            'age': 25,
-            'dept':'EEE',
-            'email':"a@gmail.com"
+    @pytest.fixture
+    def api_client(self):
+        return APIClient()
+
+    @pytest.fixture
+    def student_create_payload(self):
+        payload={
+            "name":"arun",
+            "age":"23",
+            "dept":"ECE",
+            "email":"arun@gmail.com"
+        }
+        record=Student.objects.create(**payload)
+        return record 
+
+    @pytest.fixture
+    def student_payload(self):
+        payload={
+            "name":"arun",
+            "age":"23",
+            "dept":"ECE",
+            "email":"arun@gmail.com"
         }
 
-        # Perform a POST request using the client
-        response = api_client.post(url, data)
+        return payload
 
-        # Assert that the response status code is 201 (created)
-        assert response.status_code == status.HTTP_201_CREATED
 
-        # Optionally, you can check the response JSON content
-        print(response.json())
+    def test_student(self,api_client,student_payload):
+        url=('/student/post/')
+        response=api_client.post(url,student_payload,format='json')
+        assert response.status_code == 201
+        assert Student.objects.count() == 1
+
+    def test_get(self,api_client,student_create_payload):
+        url=('student-get')
+        response=api_client.get(reverse(url))
+        assert response.status_code==200
+        assert len(response.data)==1
+
+        data= dict(response.data[0])
+        assert data['name'] == student_create_payload.name
+
+    def test_update(self,student_create_payload,api_client,student_payload):
+        url=(f'/student/update/{student_create_payload.id}/')
+        response=api_client.put(url,student_payload)
+        assert response.status_code == 200
+        print(student_create_payload.id)
+
