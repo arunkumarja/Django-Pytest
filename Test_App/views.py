@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .serializers import UserSerializer,StudentSerializer
+from .serializers import UserSerializer,StudentSerializer,UserSerializer1
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Student
@@ -28,7 +28,7 @@ class UserLoginView(APIView):
         user = authenticate(username=username, password=password)
         if user:
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'token': token.key,"user":user.username}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogoutView(APIView):
@@ -41,6 +41,16 @@ class UserLogoutView(APIView):
             return Response("User logout",status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class Userget(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        try:
+            user=User.objects.all()
+            data=UserSerializer1(user,many=True)
+            return Response(data.data,status=200)
+        except Exception as e:
+            return Response(f'{e}',status=400)        
 
 
 class StudentAPI(APIView):
