@@ -16,7 +16,7 @@
 #     def student_create_payload(self):
 #         payload={
 #             "name":"arun",
-#             "age":"23",
+#             "age":"25",
 #             "dept":"ECE",
 #             "email":"arun@gmail.com"
 #         }
@@ -40,17 +40,17 @@
 #         response=api_client.post(url,student_payload,format='json')
 #         print(response.data,"***************************************************")
 #         assert response.status_code == 201
-#         assert Student.objects.count() == 1
+#         assert Student.objects.count() == 9
 
 #     def test_get(self,api_client,student_create_payload):
 #         url=('student-get')
 #         response=api_client.get(reverse(url))
 #         print(response.data,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 #         assert response.status_code==200
-#         assert len(response.data)==1
+#         assert len(response.data)==9
 
-#         data= dict(response.data[0])
-#         assert data['age'] == 23
+#         data= dict(response.data[1])
+#         assert data['age'] == 20
 
 #     def test_update(self,student_create_payload,api_client,student_payload):
 #         url=(f'/student/update/{student_create_payload.id}/')

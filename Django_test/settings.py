@@ -75,17 +75,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Django_test.wsgi.application'
 
-
+import sys
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 load_dotenv()
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('NAME'),  # Replace with your database name
-        'USER': os.getenv('USER'),  # Replace with your database user
-        'PASSWORD': os.getenv('PASSWORD'),  # Replace with your database password
-        'HOST': os.getenv('HOST'),  # Replace with your database host (e.g., 'localhost')
+        'NAME': os.getenv('NAME'),  
+        'USER': os.getenv('USER'),  
+        'PASSWORD': os.getenv('PASSWORD'),  
+        'HOST': os.getenv('HOST'),  
         'PORT': os.getenv('PORT'),  
     }
 }
@@ -138,3 +140,4 @@ REST_FRAMEWORK = {
  
     ],
 }
+

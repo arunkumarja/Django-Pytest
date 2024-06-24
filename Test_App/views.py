@@ -50,7 +50,15 @@ class Userget(APIView):
             data=UserSerializer1(user,many=True)
             return Response(data.data,status=200)
         except Exception as e:
-            return Response(f'{e}',status=400)        
+            return Response(f'{e}',status=400)   
+class DeleteAPI(APIView):
+    def delete(self,request,pk):
+        try:
+            user=User.objects.get(pk=pk)
+            user.delete() 
+            return Response('User successfully deleted',status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response(f"{e}")           
 
 
 class StudentAPI(APIView):
